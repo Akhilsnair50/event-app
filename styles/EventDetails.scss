@@ -1,0 +1,273 @@
+.event-page-wrapper {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  min-height: 100vh;
+
+  .event-blur-overlay {
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85); // light dark overlay
+    backdrop-filter: blur(70px); 
+    -webkit-backdrop-filter: blur(20px);
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.event-detail-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+.event-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-sidebar {
+  width: 280px;
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  img {
+    border-radius: 8px;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+    text-align: center;
+    margin: 1rem 0 0.5rem;
+  }
+
+  .buy-btn {
+    background: #b360ff;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 1rem;
+    width: 100%;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .price-hint {
+    color: #ccc;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+}
+
+.event-content {
+  flex: 1;
+}
+
+.event-about ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.event-media img {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.footer {
+  background: #111;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  color: #aaa;
+
+  a {
+    margin-left: 1rem;
+    color: #aaa;
+    text-decoration: none;
+  }
+}
+.event-header {
+  margin-top: 20px;
+  text-align: center;
+
+  img {
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 16px;
+  }
+}
+.event-about {
+  flex: 1;
+
+  h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 1.5rem;
+
+    li {
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+.event-media {
+  margin: 2rem 0;
+
+  img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+
+  iframe {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px;
+    height: 315px;
+  }
+}
+.event-venue {
+  margin-bottom: 3rem;
+
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  iframe {
+    width: 100%;
+    height: 200px;
+    border: none;
+    border-radius: 10px;
+    margin: 1rem 0;
+  }
+
+  .organizer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+      background: #333;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}
+.event-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #ddd;
+
+  br {
+    display: block;
+    margin-bottom: 0.5rem;
+    content: '';
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #fff;
+  }
+}
+.event-detail-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.event-sidebar {
+  position: sticky;
+  top: 80px; // comes just below the navbar
+  width: 280px;
+  height: auto;
+  flex-shrink: 0;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.4); // translucent black
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+
+  img {
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .buy-btn {
+    background: #b360ff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 1rem;
+    width: 100%;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .price-hint {
+    color: #ddd;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+}
+
+
+.event-content {
+  flex: 1;
+  min-width: 0;
+}

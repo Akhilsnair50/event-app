@@ -1,0 +1,163 @@
+.ticket-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background: rgba(12, 10, 14, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ticket-modal {
+  background: linear-gradient(145deg, #20112a, #1c1320);
+  border-radius: 16px;
+  padding: 24px;
+  width: 700px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-modal-header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  img {
+    border-radius: 10px;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-top: 0.25rem;
+  }
+}
+
+.ticket-row {
+  background: #2b1c3a;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .info {
+    flex: 1;
+
+    h4 {
+      font-size: 1rem;
+      margin: 0 0 0.5rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: #bbb;
+      margin: 0;
+    }
+  }
+
+  .action {
+    text-align: right;
+    min-width: 110px;
+
+    .price {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .fee {
+      font-size: 0.75rem;
+      color: #bbb;
+    }
+
+    .add-btn {
+      margin-top: 8px;
+      background: #662d91;
+      color: #fff;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .counter {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+
+      button {
+        background: #3d2a6e;
+        border: none;
+        color: white;
+        border-radius: 6px;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+      }
+
+      span {
+        min-width: 20px;
+        text-align: center;
+      }
+    }
+
+    .sold-out {
+      margin-top: 8px;
+      color: #ff5b5b;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.ticket-modal-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1rem;
+
+  .total {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .continue-btn {
+    background: #b360ff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+}
+
+.ticket-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: #bbb;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
