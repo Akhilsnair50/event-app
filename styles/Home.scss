@@ -1,0 +1,16 @@
+.home-page {
+  background: linear-gradient(to bottom right, #0d0d0d 0%, #1c1c1c 100%);
+  color: white;
+  padding-bottom: 60px;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+}
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
