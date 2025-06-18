@@ -13,41 +13,40 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Upload project to server
+      - name: Copy project to DigitalOcean
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "."
-          target: "/var/www/customer-frontend-temp"
+          target: "/var/www/customer-frontend"
 
-      - name: SSH into server and deploy app
+      - name: SSH into server and deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Clean previous app
-            rm -rf /var/www/customer-frontend
-            mv /var/www/customer-frontend-temp /var/www/customer-frontend
             cd /var/www/customer-frontend
 
-            # Load env variables
+            # Ensure Node.js and PM2 are installed
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            nvm install --lts
+            nvm use --lts
+
+            # Install dependencies
+            npm ci --omit=dev
+
+            # Setup env
             cp .env.production .env.local
 
-            # Install dependencies (prod only)
-            npm install --omit=dev
-
-            # Build the app
+            # Run build
             npm run build
 
-            # Start using PM2
-            pm2 stop customer-app || true
+            # Restart via PM2
             pm2 delete customer-app || true
-            pm2 start npm --name customer-app -- start
-
-            # Auto-start on reboot
+            pm2 start npm --name "customer-app" -- start
             pm2 save
-            pm2 startup systemd -u $USER --hp $HOME
