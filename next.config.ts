@@ -1,12 +1,11 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack(config) {
+  webpack(config: any) {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
       '@': __dirname,
-    };
-    return config;
+    }
+    return config
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
