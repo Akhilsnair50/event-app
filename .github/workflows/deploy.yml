@@ -13,39 +13,41 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Copy project to DigitalOcean
+      - name: Upload project to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "."
-          target: "/var/www/customer-frontend"
+          target: "/var/www/customer-frontend-temp"
 
-      - name: SSH into server and deploy
+      - name: SSH into server and deploy app
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # Clean previous app
+            rm -rf /var/www/customer-frontend
+            mv /var/www/customer-frontend-temp /var/www/customer-frontend
             cd /var/www/customer-frontend
 
-            # Install dependencies
-            npm install --omit=dev
-
-            # Copy env.production as .env.local
+            # Load env variables
             cp .env.production .env.local
 
-            # Build Next.js app
+            # Install dependencies (prod only)
+            npm install --omit=dev
+
+            # Build the app
             npm run build
 
-            # Stop any existing container (if you're running with PM2 or similar, adapt this)
+            # Start using PM2
             pm2 stop customer-app || true
             pm2 delete customer-app || true
+            pm2 start npm --name customer-app -- start
 
-            # Start Next.js app using PM2
-            pm2 start npm --name "customer-app" -- start
-
-            # Save PM2 process list so it starts on reboot
+            # Auto-start on reboot
             pm2 save
+            pm2 startup systemd -u $USER --hp $HOME
