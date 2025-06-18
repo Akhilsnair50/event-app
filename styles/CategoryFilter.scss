@@ -24,3 +24,23 @@
     }
   }
 }
+@media (max-width: 768px) {
+  .category-filter {
+    gap: 10px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 4px;
+    scrollbar-width: none; // hide scrollbar on Firefox
+
+    &::-webkit-scrollbar {
+      display: none; // hide scrollbar on Chrome
+    }
+
+    button {
+      white-space: nowrap;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 16px;
+    }
+  }
+}

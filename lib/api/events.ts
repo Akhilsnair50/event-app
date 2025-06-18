@@ -22,3 +22,7 @@ export const getEventById = async (id: number): Promise<CustomerEventResponse> =
   const res = await api.get(`/public/events/${id}`)
   return res.data
 }
+export async function searchEvents(query: string): Promise<CustomerEventResponse[]> {
+  const res = await api.get(`/public/events/search?q=${encodeURIComponent(query)}`)
+  return res.data
+}
