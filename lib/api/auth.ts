@@ -1,5 +1,5 @@
 import { api } from './axios'
-import { API } from '../../../event-app/app/config/api-routes'
+import { API } from '@/app/config/api-routes'
 
 
 export const googleLogin = async (idToken: string): Promise<string> => {
