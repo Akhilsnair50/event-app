@@ -1,9 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import '../styles/EventCard.scss'
 import Link from 'next/link'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
+import '../styles/EventCard.scss'
 
 interface Props {
   id: number
@@ -19,7 +20,12 @@ export default function EventCard({ id, image, title, date, location, price }: P
 
   return (
     <Link href={`/events/${id}`}>
-      <div className="event-card">
+      <motion.div
+        className="event-card"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+      >
         <Image
           src={imgSrc}
           alt={title}
@@ -27,14 +33,15 @@ export default function EventCard({ id, image, title, date, location, price }: P
           height={300}
           className="event-image"
           unoptimized
-          priority
-          onError={() => setImgSrc('/assets/rihanna.png')} // fallback image
+          loading="lazy"
+          onError={() => setImgSrc('/assets/rihanna.png')}
         />
+
         <h3>{title}</h3>
         <p>{date}</p>
         <p>{location}</p>
         <p className="price">{price}</p>
-      </div>
+      </motion.div>
     </Link>
   )
 }

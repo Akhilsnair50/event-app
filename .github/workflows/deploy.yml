@@ -1,0 +1,51 @@
+name: Deploy Next.js Customer App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Copy project to DigitalOcean
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "."
+          target: "/var/www/customer-frontend"
+
+      - name: SSH into server and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/customer-frontend
+
+            # Install dependencies
+            npm install --omit=dev
+
+            # Copy env.production as .env.local
+            cp .env.production .env.local
+
+            # Build Next.js app
+            npm run build
+
+            # Stop any existing container (if you're running with PM2 or similar, adapt this)
+            pm2 stop customer-app || true
+            pm2 delete customer-app || true
+
+            # Start Next.js app using PM2
+            pm2 start npm --name "customer-app" -- start
+
+            # Save PM2 process list so it starts on reboot
+            pm2 save

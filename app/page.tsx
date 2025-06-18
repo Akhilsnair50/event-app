@@ -1,21 +1,30 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import HeroBanner from '@/components/HeroBanner'
 import SearchBar from '@/components/SearchBar'
 import CategoryFilter from '@/components/CategoryFilter'
 import EventCard from '@/components/EventCard'
-import { getUpcomingEvents, CustomerEventResponse } from '@/lib/api/events'
+import { getUpcomingEvents, searchEvents, CustomerEventResponse } from '@/lib/api/events'
 import '../styles/Home.scss'
 
 export default function Home() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const [searchQuery, setSearchQuery] = useState('')
   const [events, setEvents] = useState<CustomerEventResponse[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const q = searchParams.get('q') || ''
+    setSearchQuery(q)
+
+    const fetch = async () => {
+      setLoading(true)
       try {
-        const data = await getUpcomingEvents()
+        const data = q ? await searchEvents(q) : await getUpcomingEvents()
         setEvents(data)
       } catch (err) {
         console.error('Failed to fetch events:', err)
@@ -24,19 +33,23 @@ export default function Home() {
       }
     }
 
-    fetchEvents()
-  }, [])
+    fetch()
+  }, [searchParams])
+
+  const handleSearch = (query: string) => {
+    const trimmed = query.trim()
+    router.replace(trimmed ? `/?q=${encodeURIComponent(trimmed)}` : '/', { scroll: false })
+  }
 
   return (
     <div className="main-hero-container">
       <HeroBanner />
-      <SearchBar />
+      <SearchBar onSearch={handleSearch} initialValue={searchQuery} />
       <div className="home-container">
         <h2 className="section-heading">
-          Popular Events <span>Auckland</span>
+          {searchQuery ? `Results for "${searchQuery}"` : 'Popular Events'} <span>Auckland</span>
         </h2>
         <CategoryFilter />
-
         {loading ? (
           <p>Loading events...</p>
         ) : (

@@ -1,0 +1,37 @@
+.stripe-result-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 2rem;
+  background: #0f0f17;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+
+  .card {
+    background: #1e1e2e;
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+
+    h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #bbb;
+      margin-top: 0.5rem;
+    }
+  }
+
+  &.success .card {
+    border-left: 5px solid #4caf50;
+  }
+
+  &.failure .card {
+    border-left: 5px solid #f44336;
+  }
+}

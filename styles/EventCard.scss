@@ -1,5 +1,6 @@
+
 .event-card {
-  background-color: rgba(255, 255, 255, 0.03); // subtle glass effect
+  background-color: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
   padding: 12px;
   text-align: left;
@@ -10,7 +11,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(36, 36, 36, 0.9); // grey opaque look
+    background-color: rgba(36, 36, 36, 0.9);
     backdrop-filter: none;
     border-color: rgba(255, 255, 255, 0.1);
   }
@@ -36,11 +37,11 @@
     color: #ccc;
 
     &:nth-of-type(1) {
-      color: #a48df0; // date
+      color: #a48df0;
     }
 
     &:nth-of-type(2) {
-      color: #a48df0; // location
+      color: #a48df0;
     }
   }
 
@@ -48,5 +49,29 @@
     font-weight: 600;
     color: #fff;
     margin-top: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-card {
+    padding: 10px;
+    border-radius: 16px;
+
+    .event-image {
+      height: 180px;
+      border-radius: 12px;
+    }
+
+    h3 {
+      font-size: 15px;
+    }
+
+    p {
+      font-size: 13px;
+    }
+
+    .price {
+      font-size: 14px;
+    }
   }
 }

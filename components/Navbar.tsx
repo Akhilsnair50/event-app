@@ -9,6 +9,7 @@ import '../styles/Navbar.scss'
 export default function Navbar() {
   const [showLogin, setShowLogin] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -27,21 +28,47 @@ export default function Navbar() {
           <Link href="/">
             <Image src="/assets/logo.svg" alt="Logo" width={120} height={30} />
           </Link>
-          <Link href="/">Explore Events</Link>
-          <a href="#">About</a>
-          <a href="#">Contact Us</a>
+          <div className="desktop-menu">
+            <Link href="/">Explore Events</Link>
+            <a href="#">About</a>
+            <a href="#">Contact Us</a>
+          </div>
         </div>
+
         <div className="navbar-right">
-          <a className="cta-text" href="#">Create Event for free</a>
-          {isLoggedIn ? (
-            <>
-              <button className="avatar-icon">👤</button>
-              <button className="logout-btn" onClick={handleLogout}>Logout</button>
-            </>
-          ) : (
-            <button className="sign-in-btn" onClick={() => setShowLogin(true)}>Sign In</button>
-          )}
+          <div className="desktop-menu">
+            <a className="cta-text" href="#">Create Event for free</a>
+            {isLoggedIn ? (
+              <>
+                <button className="avatar-icon">👤</button>
+                <button className="logout-btn" onClick={handleLogout}>Logout</button>
+              </>
+            ) : (
+              <button className="sign-in-btn" onClick={() => setShowLogin(true)}>Sign In</button>
+            )}
+          </div>
+
+          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+            ☰
+          </button>
         </div>
+
+        {menuOpen && (
+          <div className="mobile-menu">
+            <Link href="/">Explore Events</Link>
+            <a href="#">About</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Create Event for free</a>
+            {isLoggedIn ? (
+              <>
+                <button className="avatar-icon">👤</button>
+                <button className="logout-btn" onClick={handleLogout}>Logout</button>
+              </>
+            ) : (
+              <button className="sign-in-btn" onClick={() => setShowLogin(true)}>Sign In</button>
+            )}
+          </div>
+        )}
       </nav>
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </>
