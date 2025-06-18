@@ -8,6 +8,13 @@ interface Props {
   onClose: () => void
 }
 
+// Extend the window object to include Google types
+declare global {
+  interface Window {
+    google: any
+  }
+}
+
 export default function LoginModal({ onClose }: Props) {
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('')
@@ -15,21 +22,23 @@ export default function LoginModal({ onClose }: Props) {
   const [error, setError] = useState('')
   const googleInitialized = useRef(false)
   const [loading, setLoading] = useState(false)
-  const isValidEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   const [emailError, setEmailError] = useState('')
-  const isValidOtp = (otp: string) => /^\d{6}$/.test(otp)
   const [otpError, setOtpError] = useState('')
 
+  const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  const isValidOtp = (otp: string) => /^\d{6}$/.test(otp)
 
   useEffect(() => {
     if (
       !googleInitialized.current &&
       typeof window !== 'undefined' &&
       window.google &&
-      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID &&
-      document.getElementById('gsi-button')
+      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
     ) {
+      const gsiButton = document.getElementById('gsi-button')
+      if (!gsiButton) return
+
       googleInitialized.current = true
 
       window.google.accounts.id.initialize({
@@ -47,57 +56,52 @@ export default function LoginModal({ onClose }: Props) {
         },
       })
 
-      window.google.accounts.id.renderButton(
-        document.getElementById('gsi-button'),
-        {
-          theme: 'outline',
-          size: 'large',
-          width: '100%',
-        }
-      )
+      window.google.accounts.id.renderButton(gsiButton, {
+        theme: 'outline',
+        size: 'large',
+        width: '100%',
+      })
     }
   }, [])
 
   const handleSendOtp = async () => {
-  if (!isValidEmail(email)) {
-    setEmailError('Please enter a valid email address')
-    return
-  }
+    if (!isValidEmail(email)) {
+      setEmailError('Please enter a valid email address')
+      return
+    }
 
-  setEmailError('')
-  setLoading(true)
-  try {
-    await requestOtp(email)
-    setStep('otp')
-    setError('')
-  } catch {
-    setError('Failed to send OTP')
-  } finally {
-    setLoading(false)
+    setEmailError('')
+    setLoading(true)
+    try {
+      await requestOtp(email)
+      setStep('otp')
+      setError('')
+    } catch {
+      setError('Failed to send OTP')
+    } finally {
+      setLoading(false)
+    }
   }
-}
-
 
   const handleVerifyOtp = async () => {
-  if (!isValidOtp(otp)) {
-    setOtpError('OTP must be a 6-digit number')
-    return
-  }
+    if (!isValidOtp(otp)) {
+      setOtpError('OTP must be a 6-digit number')
+      return
+    }
 
-  setOtpError('')
-  setLoading(true)
-  try {
-    const jwt = await verifyOtp(email, otp)
-    localStorage.setItem('token', jwt)
-    onClose()
-    window.location.reload()
-  } catch {
-    setError('Invalid or expired OTP')
-  } finally {
-    setLoading(false)
+    setOtpError('')
+    setLoading(true)
+    try {
+      const jwt = await verifyOtp(email, otp)
+      localStorage.setItem('token', jwt)
+      onClose()
+      window.location.reload()
+    } catch {
+      setError('Invalid or expired OTP')
+    } finally {
+      setLoading(false)
+    }
   }
-}
-
 
   return (
     <div className="modal-overlay">
@@ -111,7 +115,9 @@ export default function LoginModal({ onClose }: Props) {
             <h2>Get Started</h2>
             <div id="gsi-button" className="google-button"></div>
 
-            <div className="divider"><span>OR</span></div>
+            <div className="divider">
+              <span>OR</span>
+            </div>
 
             <div className="input-wrapper">
               <input
@@ -121,7 +127,6 @@ export default function LoginModal({ onClose }: Props) {
                 onChange={(e) => setEmail(e.target.value)}
               />
               {emailError && <p className="error">{emailError}</p>}
-
             </div>
             <button
               className="continue-btn"
@@ -130,13 +135,13 @@ export default function LoginModal({ onClose }: Props) {
             >
               {loading ? <span className="loader"></span> : 'Continue'}
             </button>
-
           </>
         ) : (
           <>
             <h2>Sign Up</h2>
             <p className="otp-instruction">
-              Please input the verification code that has been sent to your email address.
+              Please input the verification code that has been sent to your
+              email address.
             </p>
             <div className="input-wrapper">
               <input
@@ -146,7 +151,6 @@ export default function LoginModal({ onClose }: Props) {
                 onChange={(e) => setOtp(e.target.value)}
               />
               {otpError && <p className="error">{otpError}</p>}
-
             </div>
             <button
               className="continue-btn"
@@ -155,7 +159,6 @@ export default function LoginModal({ onClose }: Props) {
             >
               {loading ? <span className="loader"></span> : 'Continue'}
             </button>
-
           </>
         )}
 
