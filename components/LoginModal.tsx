@@ -11,10 +11,27 @@ interface Props {
 // Extend the window object to include Google types
 declare global {
   interface Window {
-    google: any
+    google: {
+      accounts: {
+        id: {
+          initialize: (config: {
+            client_id: string
+            callback: (response: { credential: string }) => void
+          }) => void
+          renderButton: (
+            parent: HTMLElement,
+            options: {
+              theme: string
+              size: string
+              width: string | number
+            }
+          ) => void
+          prompt: () => void
+        }
+      }
+    }
   }
 }
-
 export default function LoginModal({ onClose }: Props) {
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('')
