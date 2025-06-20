@@ -9,29 +9,7 @@ interface Props {
 }
 
 // Extend the window object to include Google types
-declare global {
-  interface Window {
-    google: {
-      accounts: {
-        id: {
-          initialize: (config: {
-            client_id: string
-            callback: (response: { credential: string }) => void
-          }) => void
-          renderButton: (
-            parent: HTMLElement,
-            options: {
-              theme: string
-              size: string
-              width: string | number
-            }
-          ) => void
-          prompt: () => void
-        }
-      }
-    }
-  }
-}
+
 export default function LoginModal({ onClose }: Props) {
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('')
@@ -74,10 +52,16 @@ export default function LoginModal({ onClose }: Props) {
       })
 
       window.google.accounts.id.renderButton(gsiButton, {
-        theme: 'outline',
-        size: 'large',
-        width: '100%',
-      })
+      type: 'standard',         // or 'icon'
+      theme: 'outline',         // or 'filled_blue', 'filled_black'
+      size: 'large',            // or 'small', 'medium'
+      shape: 'pill',     // optional: 'pill', 'circle', 'square'
+      text: 'signin_with',      // optional: 'continue_with' or 'signup_with'
+      logo_alignment: 'left',   // optional
+      width: 100                // must be a number
+    })
+
+
     }
   }, [])
 
