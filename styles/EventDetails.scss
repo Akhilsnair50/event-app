@@ -18,53 +18,102 @@
 
 .event-detail-layout {
   display: flex;
-  flex-wrap: wrap;
+  align-items: flex-start;
   gap: 2rem;
-  padding: 2rem 1.5rem;
+  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-}
 
-
-.event-content {
-  flex: 1;
-  min-width: 0;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
 }
 
 .event-sidebar {
   width: 280px;
-  padding: 1rem;
-  border-radius: 12px;
+  padding: 1.5rem;
+  border-radius: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: white;
+  gap: 1.25rem;
+
+  position: sticky;
+  top: 100px;
+
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+
+  @media (max-width: 768px) {
+    position: static;
+    width: 100%;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px);
+
+    .buy-btn,
+    .price-hint {
+      display: none;
+    }
+  }
 
   img {
-    border-radius: 8px;
+    border-radius: 12px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
   }
 
   h2 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     text-align: center;
-    margin: 1rem 0 0.5rem;
+    margin: 0;
+  }
+
+  .sidebar-meta {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: #ccc;
+    }
   }
 
   .buy-btn {
     background: #b360ff;
-    padding: 10px 16px;
+    padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    margin-top: 1rem;
     width: 100%;
     font-weight: bold;
     color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
   }
 
   .price-hint {
     color: #ccc;
     font-size: 0.85rem;
     margin-top: 0.5rem;
+    text-align: center;
   }
+}
+
+
+
+.event-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .event-content {
@@ -95,15 +144,18 @@
   }
 }
 .event-header {
-  margin-top: 20px;
+  margin: 3rem auto 2rem;
   text-align: center;
+  max-width: 1200px;
+  padding: 0 1rem;
 
   img {
     width: 100%;
-    max-width: 1200px;
     border-radius: 16px;
+    object-fit: cover;
   }
 }
+
 .event-about {
   flex: 1;
 
@@ -209,42 +261,62 @@
 .event-detail-layout {
   display: flex;
   align-items: flex-start;
-  gap: 2rem;
-  padding: 2rem;
+  gap: 4rem;
+  padding: 0;
 }
 
 .event-sidebar {
-  position: sticky;
-  top: 80px; // comes just below the navbar
   width: 280px;
-  height: auto;
-  flex-shrink: 0;
   padding: 1.5rem;
   border-radius: 1rem;
-  background: rgba(0, 0, 0, 0.4); // translucent black
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
   color: white;
+  gap: 1.25rem;
 
   img {
     border-radius: 12px;
-    margin-bottom: 1rem;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
   }
 
   h2 {
     font-size: 1.2rem;
     text-align: center;
-    margin-bottom: 0.5rem;
+    margin: 0;
+    color: white;
   }
 
-  p {
-    margin-bottom: 0.5rem;
-    text-align: center;
+  .sidebar-meta {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: #ccc;
+      line-height: 1.4;
+
+      img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
+
+      span {
+        flex: 1;
+        display: inline-block;
+      }
+    }
   }
 
   .buy-btn {
@@ -252,17 +324,18 @@
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    margin-top: 1rem;
     width: 100%;
     font-weight: bold;
     color: #fff;
     cursor: pointer;
+    font-size: 1rem;
   }
 
   .price-hint {
-    color: #ddd;
+    color: #ccc;
     font-size: 0.85rem;
     margin-top: 0.5rem;
+    text-align: center;
   }
 }
 
@@ -270,4 +343,124 @@
 .event-content {
   flex: 1;
   min-width: 0;
+}
+/* ✅ Mobile Sticky Buy Button Bar — Figma Matching */
+.mobile-buy-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .event-detail-layout {
+    flex-direction: column; // stack sidebar and content
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+
+  .event-sidebar {
+    position: static;
+    width: 100%;
+    padding: 1rem;
+    background: rgb(255, 255, 255);
+    box-shadow: none;
+    backdrop-filter: blur(8px);
+    background: transparent;
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    h2 {
+      font-size: 1rem;
+    }
+
+    .buy-btn,
+    .price-hint {
+      display: none; // hide sidebar button
+    }
+  }
+
+  .event-content {
+    width: 100%;
+    flex: unset;
+  }
+
+  .event-header {
+    display: none; // hide top image
+  }
+
+  .event-about h3,
+  .event-venue h3 {
+    font-size: 1.1rem;
+  }
+
+  .event-description {
+    font-size: 0.95rem;
+  }
+
+  .event-media iframe {
+    height: 220px;
+  }
+
+  .event-venue iframe {
+    height: 180px;
+  }
+
+  .event-venue .organizer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .event-blur-overlay {
+    padding-bottom: 100px; // space for sticky button
+  }
+
+  .mobile-buy-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: #1a1a1a;
+    padding: 1rem 1.2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+
+    .buy-bar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      font-size: 1rem;
+      width: 100%;
+      gap: 0.75rem;
+
+      span {
+        flex: 1;
+      }
+
+      .buy-btn {
+        background: linear-gradient(90deg, #a541f5, #7914e0);
+        padding: 10px 20px;
+        border-radius: 30px;
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        font-size: 1rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      strong {
+        color: #fff;
+      }
+    }
+  }
 }

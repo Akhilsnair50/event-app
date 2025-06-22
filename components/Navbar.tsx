@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import LoginModal from './LoginModal'
 import '../styles/Navbar.scss'
 
@@ -10,15 +10,32 @@ export default function Navbar() {
   const [showLogin, setShowLogin] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     setIsLoggedIn(!!token)
   }, [])
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   const handleLogout = () => {
     localStorage.removeItem('token')
-    window.location.reload()
+    localStorage.removeItem('user_email') // optional: clear saved email too
+    window.location.href = '/'
   }
 
   return (
@@ -29,7 +46,6 @@ export default function Navbar() {
             <Image src="/assets/logo.svg" alt="Logo" width={120} height={30} />
           </Link>
           <div className="desktop-menu">
-            <Link href="/">Explore Events</Link>
             <a href="#">About</a>
             <a href="#">Contact Us</a>
           </div>
@@ -37,32 +53,34 @@ export default function Navbar() {
 
         <div className="navbar-right">
           <div className="desktop-menu">
-            <a className="cta-text" href="#">Create Event for free</a>
+            <a className="cta-text" href="https://console.prizmatix.nz">Create Event for free</a>
             {isLoggedIn ? (
-              <>
-                <button className="avatar-icon">👤</button>
-                <button className="logout-btn" onClick={handleLogout}>Logout</button>
-              </>
+              <div className="profile-dropdown" ref={dropdownRef}>
+                <button className="avatar-icon" onClick={() => setDropdownOpen(!dropdownOpen)}>👤</button>
+                {dropdownOpen && (
+                  <div className="dropdown-menu">
+                    <Link href="/orders">My Tickets</Link>
+                    <button onClick={handleLogout}>Logout</button>
+                  </div>
+                )}
+              </div>
             ) : (
               <button className="sign-in-btn" onClick={() => setShowLogin(true)}>Sign In</button>
             )}
           </div>
 
-          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-            ☰
-          </button>
+          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>☰</button>
         </div>
 
         {menuOpen && (
           <div className="mobile-menu">
-            <Link href="/">Explore Events</Link>
             <a href="#">About</a>
             <a href="#">Contact Us</a>
-            <a href="#">Create Event for free</a>
+            <a href="https://console.prizmatix.nz">Create Event for free</a>
             {isLoggedIn ? (
               <>
-                <button className="avatar-icon">👤</button>
-                <button className="logout-btn" onClick={handleLogout}>Logout</button>
+                <Link href="/orders">My Tickets</Link>
+                <button onClick={handleLogout}>Logout</button>
               </>
             ) : (
               <button className="sign-in-btn" onClick={() => setShowLogin(true)}>Sign In</button>
@@ -70,6 +88,7 @@ export default function Navbar() {
           </div>
         )}
       </nav>
+
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </>
   )

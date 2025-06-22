@@ -5,6 +5,7 @@ export interface CustomerEventResponse {
   name: string
   shortDescription: string
   bannerImage: string
+  thumbnailImage: string
   startDate: string
   startTime: string
   timezone: string

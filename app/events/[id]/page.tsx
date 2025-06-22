@@ -9,9 +9,9 @@ import EventAbout from '@/components/EventAbout'
 import VenueSection from '@/components/VenueSection'
 import Footer from '@/components/Footer'
 import TicketSelectionModal from '@/components/TicketSelectionModal'
+import Portal from '@/components/Portal'
 
 import '@/styles/EventDetails.scss'
-import Portal from '@/components/Portal'
 
 export default function EventDetailPage() {
   const { id } = useParams()
@@ -34,22 +34,31 @@ export default function EventDetailPage() {
     <div className="event-page-wrapper" style={{ backgroundImage: `url(${bgImage})` }}>
       <div className="event-blur-overlay">
         <div className="event-gradient-overlay" />
-        <EventDetailsHeader banner={event.bannerImage} />
-        <div className="event-detail-layout">
-          <EventSidebar
-            title={event.name}
-            date={event.startDate}
-            time={event.startTime}
-            location={event.eventLocationName}
-            price={event.minTicketPrice}
-            image={event.bannerImage}
-            onBuyClick={() => setShowModal(true)}
-          />
-          <div className="event-content">
-            <EventAbout description={event.shortDescription} />
-            <VenueSection location={event.eventLocationName} />
+
+        {/* ✅ Shared container for aligned layout */}
+        <div className="event-container">
+          <EventDetailsHeader banner={event.bannerImage} />
+
+          <div className="event-detail-layout">
+            <EventSidebar
+              title={event.name}
+              date={event.startDate}
+              time={event.startTime}
+              location={event.eventLocationName}
+              price={event.minTicketPrice}
+              image={event.thumbnailImage}
+              onBuyClick={() => setShowModal(true)}
+            />
+            <div className="event-content">
+              <EventAbout description={event.shortDescription} />
+              <VenueSection location={event.eventLocationName} />
+            </div>
           </div>
+
+          {/* ✅ Footer inside event-container */}
+          <Footer />
         </div>
+
         {showModal && (
           <Portal>
             <TicketSelectionModal
@@ -62,7 +71,16 @@ export default function EventDetailPage() {
             />
           </Portal>
         )}
-        <Footer />
+      </div>
+
+      {/* ✅ Mobile sticky bar untouched */}
+      <div className="mobile-buy-bar">
+        <div className="buy-bar-inner">
+          <span>
+            Ticket rate starting from <strong>${event.minTicketPrice}</strong>
+          </span>
+          <button className="buy-btn" onClick={() => setShowModal(true)}>Buy Tickets</button>
+        </div>
       </div>
     </div>
   )

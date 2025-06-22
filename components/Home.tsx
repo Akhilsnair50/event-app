@@ -58,7 +58,7 @@ export default function Home() {
               <EventCard
                 key={event.id}
                 id={event.id}
-                image={event.bannerImage}
+                image={event.thumbnailImage}
                 title={event.name}
                 date={`${event.startDate} ${event.startTime}`}
                 location={event.eventLocationName}
