@@ -125,7 +125,7 @@ export default function TicketSelectionModal({
         ))}
 
         <div className="ticket-modal-footer">
-          <div className="total">${getTotal().toFixed(2)} AUD</div>
+          <div className="total">${getTotal().toFixed(2)} NZD</div>
           <button className="continue-btn" onClick={handleContinue}>Continue</button>
         </div>
       </div>

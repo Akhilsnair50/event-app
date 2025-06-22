@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -27,17 +29,27 @@ export default function EventSidebar({
       <Image
         src={imgSrc}
         alt={title}
-        width={200}
-        height={200}
+        width={220}
+        height={220}
         onError={() => setImgSrc('/assets/rihanna.png')}
         unoptimized
         priority
       />
       <h2>{title}</h2>
-      <p>{date}, {time}</p>
-      <p>📍 {location}</p>
+
+      <div className="sidebar-meta">
+        <div className="meta-item">
+          <Image src="/assets/calendar.svg" alt="Date" width={20} height={20} />
+          <span>{date}, {time}</span>
+        </div>
+        <div className="meta-item">
+          <Image src="/assets/location.svg" alt="Location" width={20} height={20} />
+          <span>{location}</span>
+        </div>
+      </div>
+
       <button className="buy-btn" onClick={onBuyClick}>Buy Tickets</button>
-      <p className="price-hint">Tickets from ₹{price}</p>
+      <p className="price-hint">Ticket rate starting from ${price}</p>
     </aside>
   )
 }
