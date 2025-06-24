@@ -6,6 +6,11 @@ const nextConfig = {
     }
     return config
   },
+  images: {
+    domains: [
+      'prizmatix-storage.syd1.cdn.digitaloceanspaces.com',
+    ],
+  },
 }
 
 export default nextConfig

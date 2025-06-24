@@ -68,7 +68,10 @@ export default function TicketSelectionModal({
 
     const payload = {
       customerEmail: '',
-      selections
+      selections,
+      eventTitle,
+      eventDate,
+      eventImage
     }
 
     localStorage.setItem('prizmatix_order', JSON.stringify(payload))

@@ -8,6 +8,7 @@
   align-items: start;
   color: #fff;
   font-family: 'Inter', sans-serif;
+  position: relative;
 }
 
 .page-title {
@@ -25,11 +26,9 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding-top: 5rem; // ✅ Matches visual height of `.page-title`
+  padding-top: 5rem;
 }
 
-
-/* Accordion sections */
 .accordion-card {
   background: #1f1f2e;
   border-radius: 12px;
@@ -51,7 +50,6 @@
   padding: 1.25rem;
 }
 
-/* Input layout */
 .form-grid {
   display: flex;
   gap: 1rem;
@@ -91,7 +89,7 @@ input {
     align-items: center;
   }
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     accent-color: #b360ff;
     width: 16px;
     height: 16px;
@@ -130,7 +128,6 @@ input {
   }
 }
 
-/* Sidebar – Order Summary */
 .summary-card {
   background: #1c1c2e;
   border-radius: 12px;
@@ -187,7 +184,6 @@ input {
   margin-top: 1rem;
 }
 
-/* Sidebar – Discount Code */
 .discount-card {
   background: #1c1c2e;
   border-radius: 12px;
@@ -219,5 +215,215 @@ input {
         background: #444;
       }
     }
+  }
+}
+
+.tooltip-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .tooltip-icon {
+  position: relative;
+  display: inline-block;
+  margin-left: 0.4rem;
+  cursor: pointer;
+
+  svg {
+    vertical-align: middle;
+    stroke: #bbb;
+  }
+
+  .tooltip-text {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 120%;
+    transform: translateY(-50%);
+    background: #2a2a3f;
+    color: #fff;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    border-radius: 6px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none;
+  }
+
+  &:hover .tooltip-text,
+  &:focus-within .tooltip-text,
+  &.active .tooltip-text {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+}
+
+@media (max-width: 768px) {
+  .order-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .order-left,
+  .order-right {
+    width: 100%;
+    padding: 0;
+  }
+
+  .order-right {
+    padding-top: 2rem;
+  }
+
+  .form-grid {
+    flex-direction: column;
+  }
+
+  .summary-card,
+  .discount-card {
+    padding: 1rem;
+  }
+
+  .summary-header {
+    flex-direction: row;
+    align-items: center;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+
+    strong {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.8rem;
+    }
+  }
+
+  .accordion-header {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .accordion-body {
+    padding: 1rem;
+  }
+
+  .summary-line {
+    font-size: 0.9rem;
+  }
+
+  .primary-btn {
+    width: 100%;
+  }
+
+  .discount-card .discount-row {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .tooltip-container {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .tooltip-icon .tooltip-text {
+      left: 0;
+      top: 130%;
+      transform: none;
+    }
+  }
+
+  .mobile-payment-bar {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #1c1c2e;
+    padding: 1rem;
+    z-index: 1000;
+    border-top: 1px solid #333;
+
+    .primary-btn {
+      width: 100%;
+      margin: 0;
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-payment-bar {
+    display: none;
+  }
+}
+/* Show/Hide Helpers */
+.hide-on-mobile {
+  display: block;
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.show-on-mobile {
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+/* Mobile bottom fixed CTA */
+.mobile-fixed-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background: #1a1a2b;
+  border-top: 1px solid #333;
+  z-index: 1000;
+
+  .primary-btn {
+    width: 100%;
+    margin: 0;
+  }
+}
+@media (max-width: 768px) {
+  .order-page-wrapper {
+    padding-bottom: 6rem; // Make space for fixed button
+  }
+
+  .mobile-fixed-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    background: #1c1c2e;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+    z-index: 99;
+
+    .primary-btn {
+      width: 100%;
+    }
+  }
+
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  .show-on-mobile {
+    display: block !important;
   }
 }
