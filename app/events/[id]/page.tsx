@@ -1,47 +1,87 @@
-// app/events/[id]/page.tsx
+'use client'
 
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { getEventById, CustomerEventResponse } from '@/lib/api/events'
-import EventDetailPage from './EventDetailClient'
-import { Metadata } from 'next'
+import EventDetailsHeader from '@/components/EventDetailsHeader'
+import EventSidebar from '@/components/EventSidebar'
+import EventAbout from '@/components/EventAbout'
+import VenueSection from '@/components/VenueSection'
+import Footer from '@/components/Footer'
+import TicketSelectionModal from '@/components/TicketSelectionModal'
+import Portal from '@/components/Portal'
 
-type Props = {
-  params: { id: string }
-}
+import '@/styles/EventDetails.scss'
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const event: CustomerEventResponse = await getEventById(Number(params.id))
+export default function EventDetailPage() {
+  const { id } = useParams()
+  const [event, setEvent] = useState<CustomerEventResponse | null>(null)
+  const [showModal, setShowModal] = useState(false)
 
-  return {
-    title: event.name,
-    description: stripHtml(event.shortDescription || ''),
-    openGraph: {
-      title: event.name,
-      description: stripHtml(event.shortDescription || ''),
-      type: 'website',
-      url: `https://prizmatix.nz/events/${event.id}`,
-      images: [
-        {
-          url: event.bannerImage,
-          width: 1200,
-          height: 630,
-          alt: event.name,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: event.name,
-      description: stripHtml(event.shortDescription || ''),
-      images: [event.bannerImage],
-    },
-  }
-}
+  useEffect(() => {
+    if (id) {
+      getEventById(Number(id)).then(setEvent).catch(console.error)
+    }
+  }, [id])
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>?/gm, '')
-}
+  if (!event) return <p>Loading event...</p>
 
-export default async function Page({ params }: Props) {
-  const event = await getEventById(Number(params.id))
-  return <EventDetailPage event={event} />
+  const bgImage = event.bannerImage?.startsWith('http')
+    ? event.bannerImage
+    : '/assets/rihanna.png'
+
+  return (
+    <div className="event-page-wrapper" style={{ backgroundImage: `url(${bgImage})` }}>
+      <div className="event-blur-overlay">
+        <div className="event-gradient-overlay" />
+
+        {/* ✅ Shared container for aligned layout */}
+        <div className="event-container">
+          <EventDetailsHeader banner={event.bannerImage} />
+
+          <div className="event-detail-layout">
+            <EventSidebar
+              title={event.name}
+              date={event.startDate}
+              time={event.startTime}
+              location={event.eventLocationName}
+              price={event.minTicketPrice}
+              image={event.thumbnailImage}
+              onBuyClick={() => setShowModal(true)}
+            />
+            <div className="event-content">
+              <EventAbout description={event.shortDescription} />
+              <VenueSection location={event.eventLocationName} locationType={event.eventLocationType} />
+            </div>
+          </div>
+
+          {/* ✅ Footer inside event-container */}
+          <Footer />
+        </div>
+
+        {showModal && (
+          <Portal>
+            <TicketSelectionModal
+              eventId={event.id}
+              eventTitle={event.name}
+              eventDate={event.startDate}
+              location={event.eventLocationName}
+              eventImage={event.bannerImage}
+              onClose={() => setShowModal(false)}
+            />
+          </Portal>
+        )}
+      </div>
+
+      {/* ✅ Mobile sticky bar untouched */}
+      <div className="mobile-buy-bar">
+        <div className="buy-bar-inner">
+          <span>
+            Ticket rate starting from <strong>${event.minTicketPrice}</strong>
+          </span>
+          <button className="buy-btn" onClick={() => setShowModal(true)}>Buy Tickets</button>
+        </div>
+      </div>
+    </div>
+  )
 }
