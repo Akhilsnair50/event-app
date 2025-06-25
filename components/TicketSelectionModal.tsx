@@ -101,31 +101,41 @@ export default function TicketSelectionModal({
           </div>
         </div>
 
-        {tickets.map(ticket => (
-          <div key={ticket.id} className="ticket-row">
-            <div className="info">
-              <h4>{ticket.name}</h4>
-              <p>{ticket.description}</p>
-            </div>
-            <div className="action">
-              <div className="price">${ticket.price.toFixed(2)}</div>
-              <div className="fee">+ $3.69 fee</div>
-              {!ticket.soldOut ? (
-                cart[ticket.id] ? (
-                  <div className="counter">
-                    <button onClick={() => decrement(ticket.id)}>-</button>
-                    <span>{cart[ticket.id]}</span>
-                    <button onClick={() => increment(ticket.id)}>+</button>
-                  </div>
+        {tickets.map(ticket => {
+          const calculateFee = (price: number) => {
+          const platformFee = (price * 0.055)+0.49
+          const gst = platformFee * 0.15
+          return platformFee + gst
+        }
+
+          const bookingFee = calculateFee(ticket.price)
+          return (
+            <div key={ticket.id} className="ticket-row">
+              <div className="info">
+                <h4>{ticket.name}</h4>
+                <p>{ticket.description}</p>
+              </div>
+              <div className="action">
+                <div className="price">${ticket.price.toFixed(2)}</div>
+                <div className="fee">+ ${bookingFee.toFixed(2)} fee</div>
+                {!ticket.soldOut ? (
+                  cart[ticket.id] ? (
+                    <div className="counter">
+                      <button onClick={() => decrement(ticket.id)}>-</button>
+                      <span>{cart[ticket.id]}</span>
+                      <button onClick={() => increment(ticket.id)}>+</button>
+                    </div>
+                  ) : (
+                    <button className="add-btn" onClick={() => increment(ticket.id)}>Add</button>
+                  )
                 ) : (
-                  <button className="add-btn" onClick={() => increment(ticket.id)}>Add</button>
-                )
-              ) : (
-                <span className="sold-out">Sold Out</span>
-              )}
+                  <span className="sold-out">Sold Out</span>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
+
 
         <div className="ticket-modal-footer">
           <div className="total">${getTotal().toFixed(2)} NZD</div>

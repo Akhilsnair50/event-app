@@ -51,7 +51,7 @@ export default function EventDetailPage() {
             />
             <div className="event-content">
               <EventAbout description={event.shortDescription} />
-              <VenueSection location={event.eventLocationName} />
+              <VenueSection location={event.eventLocationName} locationType={event.eventLocationType} />
             </div>
           </div>
 

@@ -18,7 +18,6 @@ export default function Navbar() {
     setIsLoggedIn(!!token)
   }, [])
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -34,7 +33,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem('token')
-    localStorage.removeItem('user_email') // optional: clear saved email too
+    localStorage.removeItem('user_email')
     window.location.href = '/'
   }
 
@@ -53,7 +52,9 @@ export default function Navbar() {
 
         <div className="navbar-right">
           <div className="desktop-menu">
-            <a className="cta-text" href="https://console.prizmatix.nz">Create Event for free</a>
+            <a className="cta-text" href="https://console.prizmatix.nz">
+              Create Event for <span className="highlight-free">Free</span>
+            </a>
             {isLoggedIn ? (
               <div className="profile-dropdown" ref={dropdownRef}>
                 <button className="avatar-icon" onClick={() => setDropdownOpen(!dropdownOpen)}>👤</button>
@@ -76,10 +77,12 @@ export default function Navbar() {
           <div className="mobile-menu">
             <a href="#">About</a>
             <a href="#">Contact Us</a>
-            <a href="https://console.prizmatix.nz">Create Event for free</a>
+            <a href="https://console.prizmatix.nz" className="create-event-link">
+               Create Event for<span className="highlight-free">Free</span>
+            </a>
             {isLoggedIn ? (
               <>
-                <Link href="/orders">My Tickets</Link>
+                <Link href="/orders"> My Tickets</Link>
                 <button onClick={handleLogout}>Logout</button>
               </>
             ) : (

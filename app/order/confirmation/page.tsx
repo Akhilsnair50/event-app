@@ -180,7 +180,7 @@ export default function OrderConfirmationPage() {
                   <input placeholder="Last Name" value={customerLastName} onChange={e => setCustomerLastName(e.target.value)} />
                 </div>
                 {emailError && <div className="error-text">{emailError}</div>}
-                <input placeholder="Email" value={customerEmail} onChange={e => setCustomerEmail(e.target.value)} />
+                <input placeholder="Email" value={customerEmail} onChange={e => setCustomerEmail(e.target.value)} className={emailError ? 'invalid' : ''}/>
                 {!isLoggedIn && (
                   <>
                     {confirmEmailError && <div className="error-text">{confirmEmailError}</div>}
@@ -189,6 +189,7 @@ export default function OrderConfirmationPage() {
                       value={confirmEmail}
                       onChange={e => setConfirmEmail(e.target.value)}
                       onPaste={e => e.preventDefault()}
+                      className={confirmEmailError ? 'invalid' : ''}
                     />
                   </>
                 )}
