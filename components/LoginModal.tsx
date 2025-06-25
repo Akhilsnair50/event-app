@@ -42,6 +42,10 @@ export default function LoginModal({ onClose }: Props) {
           try {
             const jwt = await googleLogin(response.credential)
             localStorage.setItem('token', jwt)
+             const payload = JSON.parse(atob(response.credential.split('.')[1]))
+            if (payload.email) {
+              localStorage.setItem('user_email', payload.email)
+            }
             onClose()
             window.location.reload()
           } catch (err) {
@@ -95,6 +99,7 @@ export default function LoginModal({ onClose }: Props) {
     try {
       const jwt = await verifyOtp(email, otp)
       localStorage.setItem('token', jwt)
+      localStorage.setItem('user_email', email)
       onClose()
       window.location.reload()
     } catch {

@@ -1,13 +1,39 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { fetchOrders } from '@/lib/api/ordersList'
 import '../../styles/OrderHistory.scss'
+import { api } from '@/lib/api/axios'
+
+interface Attendee {
+  attendeeName: string
+  ticketType: string
+}
+
+interface CustomerOrderDto {
+  orderId: number
+  grandTotal: number | null
+  createdAt: string
+  eventName: string
+  eventLocation: string
+  eventBannerImage: string | null
+  eventDateTime: string
+  attendees: Attendee[]
+}
+
+// Helper to validate remote image URL or fallback
+const getSafeImageUrl = (url: string | null | undefined): string => {
+  return url && url.startsWith('http')
+    ? url
+    : '/assets/sample-event.jpg'
+}
 
 export default function OrderHistoryPage() {
-  const [orders, setOrders] = useState<any[]>([])
+  const [orders, setOrders] = useState<CustomerOrderDto[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [filter, setFilter] = useState<'all' | 'live' | 'expired'>('all')
 
   useEffect(() => {
     fetchOrders()
@@ -22,46 +48,98 @@ export default function OrderHistoryPage() {
       })
   }, [])
 
-  if (loading) return <div className="orders-page"><p>Loading your tickets...</p></div>
-  if (error) return <div className="orders-page"><p>{error}</p></div>
+  const now = new Date()
+  const filteredOrders = orders.filter(order => {
+    if (filter === 'all') return true
+    const eventDate = new Date(order.eventDateTime)
+    return filter === 'live' ? eventDate >= now : eventDate < now
+  })
+
+  const handleDownload = async (orderId: number) => {
+  try {
+    await api.post(`/api/orders/${orderId}/resend-ticket`, null, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+      },
+    })
+
+    alert('Ticket email has been resent to your email.')
+  } catch (err) {
+    console.error(err)
+    alert('Failed to resend ticket. Please try again later.')
+  }
+}
+
+
+
+  if (loading) {
+    return (
+      <div className="orders-page">
+        <p>Loading your tickets...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="orders-page">
+        <p>{error}</p>
+      </div>
+    )
+  }
 
   return (
     <div className="orders-page">
       <h1>Your Tickets</h1>
 
       <div className="order-filters">
-        <button>All Tickets</button>
-        <button>Live Tickets</button>
-        <button>Expired Tickets</button>
+        <button onClick={() => setFilter('all')} className={filter === 'all' ? 'active' : ''}>
+          All Tickets
+        </button>
+        <button onClick={() => setFilter('live')} className={filter === 'live' ? 'active' : ''}>
+          Live Tickets
+        </button>
+        <button onClick={() => setFilter('expired')} className={filter === 'expired' ? 'active' : ''}>
+          Expired Tickets
+        </button>
         <select>
           <option>Past 3 Months</option>
         </select>
       </div>
 
       <div className="order-list">
-        {orders.map(order => (
-          <div key={order.id} className="order-card">
+        {filteredOrders.map(order => (
+          <div key={order.orderId} className="order-card">
             <div className="order-header">
-              <img src="/assets/sample-event.jpg" alt="Event" />
+              <Image
+                src={getSafeImageUrl(order.eventBannerImage)}
+                alt="Event"
+                width={300}
+                height={180}
+              />
               <div className="order-info">
-                <h2>{order.eventName ?? 'Event Title'}</h2>
-                <p>{order.eventDateTime ?? 'Date | Time'}</p>
-                <p>{order.eventLocation ?? 'Venue'}</p>
+                <h2>{order.eventName}</h2>
+                <p>{order.eventDateTime}</p>
+                <p>{order.eventLocation}</p>
                 <div className="tags">
-                  {order.tickets.map((t: any) => (
-                    <span key={t.id}>×1 {t.attendeeName}</span>
+                  {order.attendees.map((attendee, index) => (
+                    <span key={index}>
+                      ×1 {attendee.attendeeName} ({attendee.ticketType})
+                    </span>
                   ))}
                 </div>
               </div>
               <div className="order-actions">
-                <button>Download ticket</button>
+                {/* <button onClick={() => handleDownload(order.orderId)}>Resend ticket</button> */}
                 <button>Request refund</button>
-                <p className="amount">${order.amount}</p>
+                <p className="amount">
+                  ${typeof order.grandTotal === 'number' ? order.grandTotal.toFixed(2) : '0.00'}
+                </p>
               </div>
             </div>
             <div className="order-meta">
               <p>Purchase Date: {new Date(order.createdAt).toLocaleString()}</p>
-              <p>Order ID: {order.id}</p>
+              <p>Order ID: {order.orderId}</p>
             </div>
           </div>
         ))}
