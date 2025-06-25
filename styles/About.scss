@@ -1,0 +1,51 @@
+.about-page {
+  background: #0a0a0a;
+  color: white;
+  min-height: 100vh;
+  padding: 60px 20px 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  .about-container {
+    max-width: 800px;
+    width: 100%;
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: #c03bff;
+      text-align: center;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      color: #e0e0e0;
+    }
+
+    strong {
+      color: #ffffff;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .about-page {
+    padding: 40px 16px;
+
+    .about-container {
+      h1 {
+        font-size: 26px;
+      }
+
+      p {
+        font-size: 15px;
+      }
+    }
+  }
+}
