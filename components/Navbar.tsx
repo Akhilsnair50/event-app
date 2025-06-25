@@ -45,8 +45,10 @@ export default function Navbar() {
             <Image src="/assets/logo.svg" alt="Logo" width={120} height={30} />
           </Link>
           <div className="desktop-menu">
-            <a href="#">About</a>
-            <a href="#">Contact Us</a>
+            <a href="/about">About</a>
+<a href="mailto:support@prizmatix.nz?subject=Support%20Request&body=Hi%20team%2C%20I%20need%20help%20with...">
+  Contact Us
+</a>
           </div>
         </div>
 
@@ -75,8 +77,11 @@ export default function Navbar() {
 
         {menuOpen && (
           <div className="mobile-menu">
-            <a href="#">About</a>
-            <a href="#">Contact Us</a>
+            <a href="/about">About</a>
+            <a href="mailto:support@prizmatix.nz?subject=Support%20Request&body=Hi%20team%2C%20I%20need%20help%20with...">
+  Contact Us
+</a>
+
             <a href="https://console.prizmatix.nz" className="create-event-link">
                Create Event for<span className="highlight-free">Free</span>
             </a>

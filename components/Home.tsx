@@ -62,7 +62,7 @@ export default function Home() {
                 title={event.name}
                 date={`${event.startDate} ${event.startTime}`}
                 location={event.eventLocationName}
-                price={`From ₹${event.minTicketPrice}`}
+                price={`From $${event.minTicketPrice}`}
               />
             ))}
           </div>

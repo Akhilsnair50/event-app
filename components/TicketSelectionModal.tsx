@@ -36,7 +36,13 @@ export default function TicketSelectionModal({
   }, [eventId])
 
   const increment = (id: number) => {
-    setCart(prev => ({ ...prev, [id]: (prev[id] || 0) + 1 }))
+    const ticket = tickets.find(t => t.id === id)
+    if (!ticket) return
+
+    const currentQty = cart[id] || 0
+    if (currentQty >= ticket.maxPurchasePerOrder) return
+
+    setCart(prev => ({ ...prev, [id]: currentQty + 1 }))
   }
 
   const decrement = (id: number) => {
@@ -50,8 +56,18 @@ export default function TicketSelectionModal({
     })
   }
 
+  const calculateBookingFee = (price: number) => {
+    const platformFee = price * 0.07 + 0.49
+    const gst = platformFee * 0.15
+    return platformFee + gst
+  }
+
   const getTotal = () =>
-    tickets.reduce((sum, t) => sum + (cart[t.id] || 0) * (t.price + 3.69), 0)
+    tickets.reduce((sum, t) => {
+      const qty = cart[t.id] || 0
+      const fee = calculateBookingFee(t.price)
+      return sum + qty * (t.price + fee)
+    }, 0)
 
   const handleContinue = () => {
     const selections = Object.entries(cart)
@@ -102,13 +118,10 @@ export default function TicketSelectionModal({
         </div>
 
         {tickets.map(ticket => {
-          const calculateFee = (price: number) => {
-          const platformFee = (price * 0.055)+0.49
-          const gst = platformFee * 0.15
-          return platformFee + gst
-        }
+          const quantity = cart[ticket.id] || 0
+          const bookingFee = calculateBookingFee(ticket.price)
+          const isMaxReached = quantity >= ticket.maxPurchasePerOrder
 
-          const bookingFee = calculateFee(ticket.price)
           return (
             <div key={ticket.id} className="ticket-row">
               <div className="info">
@@ -119,14 +132,20 @@ export default function TicketSelectionModal({
                 <div className="price">${ticket.price.toFixed(2)}</div>
                 <div className="fee">+ ${bookingFee.toFixed(2)} fee</div>
                 {!ticket.soldOut ? (
-                  cart[ticket.id] ? (
+                  quantity ? (
                     <div className="counter">
                       <button onClick={() => decrement(ticket.id)}>-</button>
-                      <span>{cart[ticket.id]}</span>
-                      <button onClick={() => increment(ticket.id)}>+</button>
+                      <span>{quantity}</span>
+                      <button onClick={() => increment(ticket.id)} disabled={isMaxReached}>+</button>
                     </div>
                   ) : (
-                    <button className="add-btn" onClick={() => increment(ticket.id)}>Add</button>
+                    <button
+                      className="add-btn"
+                      onClick={() => increment(ticket.id)}
+                      disabled={isMaxReached}
+                    >
+                      Add
+                    </button>
                   )
                 ) : (
                   <span className="sold-out">Sold Out</span>
@@ -136,10 +155,11 @@ export default function TicketSelectionModal({
           )
         })}
 
-
         <div className="ticket-modal-footer">
           <div className="total">${getTotal().toFixed(2)} NZD</div>
-          <button className="continue-btn" onClick={handleContinue}>Continue</button>
+          <button className="continue-btn" onClick={handleContinue} disabled={Object.keys(cart).length === 0}>
+            Continue
+          </button>
         </div>
       </div>
     </div>
