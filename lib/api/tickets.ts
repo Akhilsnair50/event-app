@@ -1,6 +1,7 @@
 import { api } from './axios'
 
 export interface TicketResponseDto {
+  remainingQuantity: number
   id: number
   name: string
   description: string

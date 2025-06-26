@@ -54,7 +54,10 @@ export default function Navbar() {
 
         <div className="navbar-right">
           <div className="desktop-menu">
-            <a className="cta-text" href="https://console.prizmatix.nz">
+            <a
+              className="cta-text"
+              href="mailto:support@prizmatix.nz?subject=Create%20Event%20Request&body=Hi%20Prizmatix%20team%2C%0A%0AI'd%20like%20to%20create%20an%20event.%20Please%20guide%20me%20through%20the%20process.%0A%0AThanks%2C"
+            >
               Create Event for <span className="highlight-free">Free</span>
             </a>
             {isLoggedIn ? (
@@ -82,7 +85,10 @@ export default function Navbar() {
   Contact Us
 </a>
 
-            <a href="https://console.prizmatix.nz" className="create-event-link">
+            <a
+                className="cta-text"
+                href="mailto:support@prizmatix.nz?subject=Create%20Event%20Request&body=Hi%20Prizmatix%20team%2C%0A%0AI'd%20like%20to%20create%20an%20event.%20Please%20guide%20me%20through%20the%20process.%0A%0AThanks%2C"
+              >
                Create Event for<span className="highlight-free">Free</span>
             </a>
             {isLoggedIn ? (

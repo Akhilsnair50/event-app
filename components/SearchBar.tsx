@@ -47,10 +47,13 @@ export default function SearchBar({ onSearch, initialValue = '' }: SearchBarProp
           )}
         </div>
 
-        <button className="location-btn" type="button">
-          <Image src="/assets/pin.svg" alt="Location" width={20} height={20} />
-          <span>Auckland, NZ</span>
-        </button>
+        <div className="location-wrapper">
+          <button className="location-btn" type="button">
+            <Image src="/assets/pin.svg" alt="Location" width={20} height={20} />
+            <span>Auckland, NZ</span>
+          </button>
+        </div>
+
       </div>
 
       <button className="search-btn" type="submit">

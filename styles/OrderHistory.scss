@@ -195,3 +195,25 @@
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
+.refund-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #b360ff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #9f20ff;
+  }
+}
+.no-orders {
+  text-align: center;
+  color: #ccc;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+}

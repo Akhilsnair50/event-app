@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import '@/styles/TicketSelectionModal.scss'
 import { fetchTickets, TicketResponseDto } from '@/lib/api/tickets'
 import Image from 'next/image'
+import { Calendar, MapPin, ShoppingCart } from 'lucide-react'
 
 interface Props {
   eventId: number
@@ -38,10 +39,9 @@ export default function TicketSelectionModal({
   const increment = (id: number) => {
     const ticket = tickets.find(t => t.id === id)
     if (!ticket) return
-
     const currentQty = cart[id] || 0
-    if (currentQty >= ticket.maxPurchasePerOrder) return
-
+    const maxQty = Math.min(ticket.maxPurchasePerOrder ?? Infinity, ticket.remainingQuantity ?? Infinity)
+    if (currentQty >= maxQty) return
     setCart(prev => ({ ...prev, [id]: currentQty + 1 }))
   }
 
@@ -95,6 +95,16 @@ export default function TicketSelectionModal({
     router.push('/order/confirmation')
   }
 
+  const formatFullDate = (dateStr: string): string => {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('en-GB', {
+      weekday: 'short',
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    })
+  }
+
   return (
     <div className="ticket-modal-overlay" onClick={onClose}>
       <div className="ticket-modal" onClick={e => e.stopPropagation()}>
@@ -113,26 +123,38 @@ export default function TicketSelectionModal({
           />
           <div>
             <h2>{eventTitle}</h2>
-            <p>{eventDate} • {location}</p>
+            <p className="event-meta">
+              <Calendar /> {formatFullDate(eventDate)}<span className="dot">•</span>
+              <MapPin /> {location}
+            </p>
           </div>
         </div>
 
         {tickets.map(ticket => {
           const quantity = cart[ticket.id] || 0
           const bookingFee = calculateBookingFee(ticket.price)
-          const isMaxReached = quantity >= ticket.maxPurchasePerOrder
+          const maxQty = Math.min(ticket.maxPurchasePerOrder ?? Infinity, ticket.remainingQuantity ?? Infinity)
+          const isSoldOut = ticket.soldOut || ticket.remainingQuantity <= 0
+          const isMaxReached = quantity >= maxQty
 
           return (
             <div key={ticket.id} className="ticket-row">
               <div className="info">
                 <h4>{ticket.name}</h4>
                 <p>{ticket.description}</p>
+                {!isSoldOut && ticket.remainingQuantity <= 5 && (
+                  <div className="remaining-warning">Only {ticket.remainingQuantity} left</div>
+                )}
               </div>
+
               <div className="action">
-                <div className="price">${ticket.price.toFixed(2)}</div>
-                <div className="fee">+ ${bookingFee.toFixed(2)} fee</div>
-                {!ticket.soldOut ? (
-                  quantity ? (
+                <div className="price-info">
+                  <div className="price">${ticket.price.toFixed(2)}</div>
+                  <div className="fee">+ ${bookingFee.toFixed(2)} fee</div>
+                </div>
+
+                {!isSoldOut ? (
+                  quantity > 0 ? (
                     <div className="counter">
                       <button onClick={() => decrement(ticket.id)}>-</button>
                       <span>{quantity}</span>
@@ -156,7 +178,10 @@ export default function TicketSelectionModal({
         })}
 
         <div className="ticket-modal-footer">
-          <div className="total">${getTotal().toFixed(2)} NZD</div>
+          <div className="total">
+            <ShoppingCart />
+            ${getTotal().toFixed(2)} NZD
+          </div>
           <button className="continue-btn" onClick={handleContinue} disabled={Object.keys(cart).length === 0}>
             Continue
           </button>

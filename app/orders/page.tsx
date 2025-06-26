@@ -96,7 +96,7 @@ export default function OrderHistoryPage() {
         <button onClick={() => setFilter('all')} className={filter === 'all' ? 'active' : ''}>
           All Tickets
         </button>
-        <button onClick={() => setFilter('live')} className={filter === 'live' ? 'active' : ''}>
+        {/* <button onClick={() => setFilter('live')} className={filter === 'live' ? 'active' : ''}>
           Live Tickets
         </button>
         <button onClick={() => setFilter('expired')} className={filter === 'expired' ? 'active' : ''}>
@@ -104,11 +104,14 @@ export default function OrderHistoryPage() {
         </button>
         <select>
           <option>Past 3 Months</option>
-        </select>
+        </select> */}
       </div>
 
       <div className="order-list">
-        {filteredOrders.map(order => (
+        {filteredOrders.length === 0 ? (
+    <p className="no-orders">You haven’t purchased any tickets yet.</p>
+  ) : 
+        (filteredOrders.map(order => (
           <div key={order.orderId} className="order-card">
             <div className="order-header">
               <Image
@@ -131,7 +134,13 @@ export default function OrderHistoryPage() {
               </div>
               <div className="order-actions">
                 {/* <button onClick={() => handleDownload(order.orderId)}>Resend ticket</button> */}
-                <button>Request refund</button>
+                <a
+                href={`mailto:support@prizmatix.nz?subject=Refund%20Request%20for%20Order%20${order.orderId}&body=Hi%20Prizmatix%20Team%2C%0A%0AI'd%20like%20to%20request%20a%20refund%20for%20my%20order.%0AOrder%20ID%3A%20${order.orderId}%0A%0AThanks%2C`}
+                className="refund-link"
+                >
+                Request refund
+                </a>
+
                 <p className="amount">
                   ${typeof order.grandTotal === 'number' ? order.grandTotal.toFixed(2) : '0.00'}
                 </p>
@@ -142,7 +151,7 @@ export default function OrderHistoryPage() {
               <p>Order ID: {order.orderId}</p>
             </div>
           </div>
-        ))}
+        )))}
       </div>
     </div>
   )

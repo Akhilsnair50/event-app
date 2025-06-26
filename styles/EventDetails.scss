@@ -471,3 +471,14 @@
   color: #ccc;
   margin-top: 0.5rem;
 }
+.banner-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 6;
+  border-radius: 16px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
