@@ -42,7 +42,7 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="navbar-left">
           <Link href="/">
-            <Image src="/assets/logo.svg" alt="Logo" width={120} height={30} />
+            <Image src="/assets/prizmatix_logo.png" alt="Logo" width={160} height={40} />
           </Link>
           <div className="desktop-menu">
             <a href="/about">About</a>

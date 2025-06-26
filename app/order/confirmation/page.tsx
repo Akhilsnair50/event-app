@@ -293,7 +293,6 @@ export default function OrderConfirmationPage() {
           </div>
         </div>
       </div>
-
       {/* Mobile CTA */}
       <div className="mobile-fixed-footer show-on-mobile">
         <button className="primary-btn" onClick={submitOrder} disabled={!canSubmitOrder || isLoading}>

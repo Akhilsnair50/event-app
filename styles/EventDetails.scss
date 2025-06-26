@@ -393,7 +393,9 @@
   .event-venue h3 {
     font-size: 1.1rem;
   }
-
+.event-description * {
+  color: white !important;
+}
   .event-description {
     font-size: 0.95rem;
   }

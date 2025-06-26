@@ -133,3 +133,65 @@
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding-top: 1rem;
 }
+@media (max-width: 768px) {
+  .orders-page {
+    padding: 1rem;
+  }
+
+  .order-filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+
+    button,
+    select {
+      width: 100%;
+    }
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .order-header img {
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+  }
+
+  .order-info {
+    width: 100%;
+  }
+
+  .order-info h2 {
+    font-size: 1rem;
+  }
+
+  .order-actions {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+
+    button {
+      font-size: 0.8rem;
+    }
+
+    .amount {
+      font-size: 1rem;
+    }
+  }
+
+  .order-meta {
+    flex-direction: column;
+    gap: 0.3rem;
+    text-align: center;
+  }
+}
+.order-list {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
