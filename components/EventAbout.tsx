@@ -1,13 +1,18 @@
+import DOMPurify from 'dompurify'
+
 export default function EventAbout({ description }: { description: string }) {
-  // Clean and convert all literal "\n" into <br />
-  const normalized = description.replace(/\\n/g, '<br />');
+  // Remove inline styles and sanitize the HTML
+  const cleanHtml = DOMPurify.sanitize(description, {
+    FORBID_ATTR: ['style'], // <--- Key part
+  });
 
   return (
     <section className="event-about">
       <h3>About</h3>
       <div
         className="event-description"
-        dangerouslySetInnerHTML={{ __html: normalized }}
+        style={{ color: 'white' }}
+        dangerouslySetInnerHTML={{ __html: cleanHtml }}
       />
     </section>
   );
