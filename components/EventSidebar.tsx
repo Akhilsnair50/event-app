@@ -1,5 +1,6 @@
 'use client'
 
+import { CalendarIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -12,6 +13,17 @@ interface Props {
   image: string
   onBuyClick: () => void
 }
+function formatFullDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-GB', {
+    weekday: 'short',   // "Sun"
+    day: '2-digit',     // "08"
+    month: 'short',     // "Jun"
+    year: 'numeric',    // "2025"
+  });
+}
+
+// Example usage:
 
 export default function EventSidebar({
   title,
@@ -40,7 +52,8 @@ export default function EventSidebar({
       <div className="sidebar-meta">
         <div className="meta-item">
           <Image src="/assets/calendar.svg" alt="Date" width={20} height={20} />
-          <span>{date}, {time}</span>
+          <span><span> {formatFullDate(date)}</span>
+          , {time}</span>
         </div>
         <div className="meta-item">
           <Image src="/assets/location.svg" alt="Location" width={20} height={20} />
