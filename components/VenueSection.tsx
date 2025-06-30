@@ -25,7 +25,7 @@ export default function VenueSection({ location, locationType }: VenueSectionPro
 
       <div className="organizer">
         {/* <p>City Music Festival Ltd. – 23 Events Conducted</p> */}
-        <button>Contact Host</button>
+        {/* <button>Contact Host</button> */}
       </div>
     </section>
   )
