@@ -47,7 +47,7 @@ export default function EventSidebar({
         unoptimized
         priority
       />
-      <h2>{title}</h2>
+      {/* <h2>{title}</h2> */}
 
       <div className="sidebar-meta">
         <div className="meta-item">

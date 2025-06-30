@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import EventDetailsHeader from '@/components/EventDetailsHeader'
 import EventSidebar from '@/components/EventSidebar'
 import EventAbout from '@/components/EventAbout'
@@ -19,10 +20,19 @@ export default function EventDetailClientPage({ event }: { event: CustomerEventR
     : '/assets/rihanna.png'
 
   return (
-    <div className="event-page-wrapper" style={{ backgroundImage: `url(${bgImage})` }}>
-      <div className="event-blur-overlay">
-        <div className="event-gradient-overlay" />
+    <div className="event-page-wrapper">
+      <div className="banner-bg">
+        <Image
+          src={bgImage}
+          alt="Event Background"
+          layout="fill"
+          objectFit="cover"
+          quality={70}
+          priority
+        />
+      </div>
 
+      <div className="event-blur-overlay">
         <div className="event-container">
           <EventDetailsHeader banner={event.bannerImage} />
 
@@ -36,35 +46,41 @@ export default function EventDetailClientPage({ event }: { event: CustomerEventR
               image={event.thumbnailImage}
               onBuyClick={() => setShowModal(true)}
             />
+
             <div className="event-content">
-              <EventAbout description={event.shortDescription} />
-              <VenueSection location={event.eventLocationName} locationType={event.eventLocationType} />
+              <EventAbout description={event.shortDescription} title= {event.name} />
+              <VenueSection
+                location={event.eventLocationName}
+                locationType={event.eventLocationType}
+              />
             </div>
           </div>
 
           <Footer />
         </div>
-
-        {showModal && (
-          <Portal>
-            <TicketSelectionModal
-              eventId={event.id}
-              eventTitle={event.name}
-              eventDate={event.startDate}
-              location={event.eventLocationName}
-              eventImage={event.bannerImage}
-              onClose={() => setShowModal(false)}
-            />
-          </Portal>
-        )}
       </div>
+
+      {showModal && (
+        <Portal>
+          <TicketSelectionModal
+            eventId={event.id}
+            eventTitle={event.name}
+            eventDate={event.startDate}
+            location={event.eventLocationName}
+            eventImage={event.bannerImage}
+            onClose={() => setShowModal(false)}
+          />
+        </Portal>
+      )}
 
       <div className="mobile-buy-bar">
         <div className="buy-bar-inner">
           <span>
             Ticket rate starting from <strong>${event.minTicketPrice}</strong>
           </span>
-          <button className="buy-btn" onClick={() => setShowModal(true)}>Buy Tickets</button>
+          <button className="buy-btn" onClick={() => setShowModal(true)}>
+            Buy Tickets
+          </button>
         </div>
       </div>
     </div>
