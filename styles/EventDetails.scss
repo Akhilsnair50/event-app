@@ -479,6 +479,10 @@
       }
     }
   }
+  .hidden-mobile-bar {
+  display: none !important;
+}
+
 }
 .tba-message {
   font-style: italic;
@@ -538,3 +542,7 @@
       background-color: rgba(255, 255, 255, 0.2);
       width: 100%;
     }
+
+    .hidden-mobile-bar {
+  display: none !important;
+}
