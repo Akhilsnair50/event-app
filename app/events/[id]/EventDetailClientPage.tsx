@@ -73,7 +73,8 @@ export default function EventDetailClientPage({ event }: { event: CustomerEventR
         </Portal>
       )}
 
-      <div className="mobile-buy-bar">
+      <div className={`mobile-buy-bar ${showModal ? 'hidden-mobile-bar' : ''}`}>
+
         <div className="buy-bar-inner">
           <span>
             Ticket rate starting from <strong>${event.minTicketPrice}</strong>
