@@ -225,7 +225,7 @@ export default function OrderConfirmationPage() {
   <label>
     <input type="checkbox" defaultChecked />
     <span>
-      Keep me updated on the latest news, events, and exclusive offers from [event org]
+      Keep me updated on the latest news, events, and exclusive offers from Organizer
       <span className="optional"> (optional)</span>
     </span>
   </label>
