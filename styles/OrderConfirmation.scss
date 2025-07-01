@@ -82,23 +82,50 @@ input.invalid {
 .checkboxes {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.85rem;
-  color: #aaa;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #e4e4e7; // Figma-like soft gray
   margin-bottom: 1.5rem;
 
   label {
     display: flex;
-    gap: 0.5rem;
-    align-items: center;
+    align-items: flex-start;
+    gap: 0.75rem;
+    line-height: 1.5;
+    font-weight: 400;
+    color: inherit;
   }
 
   input[type='checkbox'] {
-    accent-color: #b360ff;
+    margin-top: 0.25rem;
+    accent-color: #c084fc; // Figma purple
     width: 16px;
     height: 16px;
+    flex-shrink: 0;
+  }
+
+  span {
+    display: block;
+  }
+
+  .optional {
+    font-size: 0.85rem;
+    color: #a1a1aa; // muted gray
+    margin-left: 0.25rem;
+    font-style: normal;
+  }
+
+  a {
+    color: #c084fc; // Figma purple
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
+
 
 .primary-btn {
   background: #b360ff;
