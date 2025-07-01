@@ -242,28 +242,29 @@
   }
 }
 .event-description {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #ddd;
-
-  br {
-    display: block;
-    margin-bottom: 0.5rem;
-    content: '';
-  }
-
-  p {
-    margin-bottom: 1rem;
-  }
+  /* ... existing styles ... */
+  color: white; /* Ensure the text color is white here */
 
   ul {
-    list-style: disc;
-    padding-left: 1.5rem;
+    list-style: none; /* Hides default bullets */
+    padding-left: 0;
     margin-bottom: 1rem;
   }
 
   li {
     margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.2em; /* Space for the custom bullet */
+  }
+
+  /* --- CHANGE THE COLOR HERE --- */
+  li::before {
+    content: '\2022'; /* Disc bullet */
+    color: white;     /* <--- Change this to white (or #ccc, #eee, etc.) */
+    position: absolute;
+    left: 0;
+    line-height: inherit;
+    // top: 0.05em; /* Fine-tune if needed */
   }
 
   strong {
@@ -406,9 +407,9 @@
   .event-venue h3 {
     font-size: 1.1rem;
   }
-.event-description * {
-  color: white !important;
-}
+// .event-description * {
+//   color: white !important;
+// }
   .event-description {
     font-size: 0.95rem;
   }

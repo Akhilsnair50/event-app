@@ -6,6 +6,9 @@ import { createCheckoutSession, getPricePreview } from '@/lib/api/orders/create-
 import '@/styles/OrderConfirmation.scss'
 import { Info } from 'lucide-react'
 import Image from 'next/image'
+import TermsModal from '@/components/TermsModal'
+import PrivacyModal from '@/components/PrivacyModal'
+import EventPolicyModal from '@/components/EventPolicyModal'
 
 function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
@@ -47,10 +50,12 @@ export default function OrderConfirmationPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [orderSummary, setOrderSummary] = useState<OrderSummary | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-
+  const [agreedToTerms, setAgreedToTerms] = useState(true)
+  const [showTermsModal, setShowTermsModal] = useState(false)
   const [emailError, setEmailError] = useState('')
   const [confirmEmailError, setConfirmEmailError] = useState('')
-
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showEventPolicyModal, setShowEventPolicyModal] = useState(false);
   useEffect(() => {
     const tooltipIcons = document.querySelectorAll('.tooltip-icon')
     tooltipIcons.forEach(icon => {
@@ -139,10 +144,7 @@ export default function OrderConfirmationPage() {
   }
 
   const canProceedToAttendees = customerFirstName && customerEmail && !emailError && (isLoggedIn || (!confirmEmailError && confirmEmail))
-  const canSubmitOrder =
-    attendees.every(a => a.firstName) &&
-    isValidEmail(customerEmail) &&
-    (!isLoggedIn ? confirmEmail === customerEmail : true)
+  const canSubmitOrder = attendees.every(a => a.firstName) && isValidEmail(customerEmail) && (!isLoggedIn ? confirmEmail === customerEmail : true)
 
   const submitOrder = async () => {
     setIsLoading(true)
@@ -163,6 +165,7 @@ export default function OrderConfirmationPage() {
       setIsLoading(false)
     }
   }
+
   return (
     <>
       <div className="order-page-wrapper">
@@ -184,23 +187,53 @@ export default function OrderConfirmationPage() {
                 {!isLoggedIn && (
                   <>
                     {confirmEmailError && <div className="error-text">{confirmEmailError}</div>}
-                    <input
-                      placeholder="Confirm Email"
-                      value={confirmEmail}
-                      onChange={e => setConfirmEmail(e.target.value)}
-                      onPaste={e => e.preventDefault()}
-                      className={confirmEmailError ? 'invalid' : ''}
-                    />
+                    <input placeholder="Confirm Email" value={confirmEmail} onChange={e => setConfirmEmail(e.target.value)} onPaste={e => e.preventDefault()} className={confirmEmailError ? 'invalid' : ''} />
                   </>
                 )}
-                <div className="checkboxes">
-                  <label><input type="checkbox" defaultChecked /> Prizmatix can send me emails about upcoming events and news (optional)</label>
-                  <label><input type="checkbox" defaultChecked /> Keep me updated on latest news and offers (optional)</label>
-                </div>
-                <button className="primary-btn" onClick={() => {
-                  setShowOrderDetails(false)
-                  setShowAttendeeDetails(true)
-                }} disabled={!canProceedToAttendees}>Continue to attendee details</button>
+<div className="checkboxes">
+  <label>
+  <input
+    type="checkbox"
+    checked={agreedToTerms}
+    onChange={(e) => setAgreedToTerms(e.target.checked)}
+  />
+  <span>
+    By continuing, you agree to the{' '}
+    <a href="#" onClick={(e) => { e.preventDefault(); setShowTermsModal(true) }}>
+      Attendee Terms
+    </a>
+    ,{' '}
+    <a href="#" onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true) }}>
+      Cookies & Privacy Policy
+    </a>
+    , and{' '}
+    <a href="#" onClick={(e) => { e.preventDefault(); setShowEventPolicyModal(true) }}>
+      Event Policy
+    </a>.
+  </span>
+</label>
+
+
+  <label>
+    <input type="checkbox" defaultChecked />
+    <span>
+      Prizmatix can send me emails about upcoming events and news
+      <span className="optional"> (optional)</span>
+    </span>
+  </label>
+
+  <label>
+    <input type="checkbox" defaultChecked />
+    <span>
+      Keep me updated on the latest news, events, and exclusive offers from [event org]
+      <span className="optional"> (optional)</span>
+    </span>
+  </label>
+</div>
+
+
+
+                <button className="primary-btn" onClick={() => { setShowOrderDetails(false); setShowAttendeeDetails(true) }} disabled={!canProceedToAttendees || !agreedToTerms}>Continue to attendee details</button>
               </div>
             )}
           </div>
@@ -217,22 +250,13 @@ export default function OrderConfirmationPage() {
                     <div key={idx} className="attendee-block">
                       <label>×1 {ticket?.name}</label>
                       <div className="form-grid">
-                        <input
-                          placeholder="First Name"
-                          value={att.firstName}
-                          onChange={e => handleAttendeeChange(idx, 'firstName', e.target.value)}
-                        />
-                        <input
-                          placeholder="Last Name"
-                          value={att.lastName}
-                          onChange={e => handleAttendeeChange(idx, 'lastName', e.target.value)}
-                        />
+                        <input placeholder="First Name" value={att.firstName} onChange={e => handleAttendeeChange(idx, 'firstName', e.target.value)} />
+                        <input placeholder="Last Name" value={att.lastName} onChange={e => handleAttendeeChange(idx, 'lastName', e.target.value)} />
                       </div>
                     </div>
                   )
                 })}
-                {/* Desktop-only CTA */}
-                <button className="primary-btn hide-on-mobile" onClick={submitOrder} disabled={!canSubmitOrder || isLoading}>
+                <button className="primary-btn hide-on-mobile" onClick={submitOrder} disabled={!canSubmitOrder || isLoading || !agreedToTerms}>
                   {isLoading ? 'Processing...' : 'Continue to Payment'}
                 </button>
               </div>
@@ -242,13 +266,7 @@ export default function OrderConfirmationPage() {
 
         <div className="order-right">
           <div className="summary-header">
-            <Image
-              src={eventImage || '/assets/rihanna.png'}
-              alt="event"
-              width={48}
-              height={48}
-              className="rounded"
-            />
+            <Image src={eventImage || '/assets/rihanna.png'} alt="event" width={48} height={48} className="rounded" />
             <div>
               <strong>{eventTitle || 'Event Name'}</strong>
               <p>{eventDate || 'Date not available'}</p>
@@ -293,7 +311,11 @@ export default function OrderConfirmationPage() {
           </div>
         </div>
       </div>
-      {/* Mobile CTA */}
+
+      <TermsModal isOpen={showTermsModal} onClose={() => setShowTermsModal(false)} />
+      <PrivacyModal isOpen={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} />
+      <EventPolicyModal isOpen={showEventPolicyModal} onClose={() => setShowEventPolicyModal(false)} />
+
       <div className="mobile-fixed-footer show-on-mobile">
         <button className="primary-btn" onClick={submitOrder} disabled={!canSubmitOrder || isLoading}>
           {isLoading ? 'Processing...' : 'Continue to Payment'}
