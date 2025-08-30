@@ -150,7 +150,7 @@ export default function TicketSelectionModal({
               <div className="action">
                 <div className="price-info">
                   <div className="price">${ticket.price.toFixed(2)}</div>
-{/*                   <div className="fee">+ ${bookingFee.toFixed(2)} fee</div> */}
+                  <div className="fee">+ ${bookingFee.toFixed(2)} fee</div>
                 </div>
 
                 {!isSoldOut ? (
