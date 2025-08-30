@@ -79,7 +79,7 @@ export default function EventPolicyModal({ isOpen, onClose }: { isOpen: boolean,
         <p>Help us care for the land. Use waste bins provided and reduce your environmental footprint. Leave no trace.</p>
 
         <h3>CONTACT</h3>
-        <p>Email: <a href="mailto:teammoksha.nz@gmail.com" className="themed-link">teammoksha.nz@gmail.com</a></p>
+        <p>Email: <a href="mailto:teammoksha.nz@gmail.com" className="themed-link">- teammoksha.nz@gmail.com</a></p>
       </div>
     </div>
   );
